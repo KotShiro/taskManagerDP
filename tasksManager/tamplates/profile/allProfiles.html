@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="columns has-background-black-ter is-centered has-text-white-bis" style="min-height:101vh;">
+	<!-- на самом деле можно было обойтись и hero, но я обратился к inline-css -->
+	<div class="column is-half">
+		<!-- {{user.username}}: {{user.last_name}} {{user.first_name}} {{user.fathername}} </h1> -->
+		<!-- <div> -->
+
+			<!-- <h2>Информация о пользователе</h2> -->
+			<!-- <p>Эл. почта: <strong>{{user.email}}</strong></p> -->
+			<!-- <p>Рабочий телефон: <strong>{{user.phone}}</strong></p> -->
+		<!-- </div> -->
+    	<h1 class="is-size-3 has-text-centered"> Пользователи </h1>
+		<table class="table table-striped" id="info-table" >
+			<thead>
+				<tr>
+				{% if user.is_superuser %}
+					<th>Логин</th>
+				{% endif %}
+					<th>ФИО</th>
+					<th>Телефон</th>
+					<th>Эл.почта</th>
+				</tr>
+			</thead>
+			<tbody id="usersList">
+			{% for thisUser in allUsers %}
+				<tr>
+				{% if user.is_superuser %}
+					<th>{{ thisUser.username }}</th>
+				{% endif %}
+					<th>{{thisUser.last_name}} {{thisUser.first_name}} {{thisUser.fathername}}</th>
+					<th>{{ thisUser.phone }}</th>
+					<th>{{ thisUser.email }}</th>
+				</tr>
+			
+			{% endfor %}
+			</tbody>
+		</table>
+
+		{% if user.is_superuser %}
+		<h3>Создание нового пользователя</h3>
+			<form action="" method="post">
+				{% csrf_token %}
+				<div class="field has-text-centered">
+					<input type="text" id="username" class="input" placeholder="Логин" name="username" required>
+				</div>
+				<div class="field has-text-centered">
+					<input type="text" id="email" class="input" placeholder="Почта" name="email" required>
+				</div>
+				<div class="field has-text-centered">
+					<input type="text" id="phone" class="input" placeholder="Телефон" name="phone" required>
+				</div>					
+				<div class="field has-text-centered">
+					<input type="text" id="password" class="input" placeholder="Пароль" name="password" required>
+				</div>
+				<div class="field has-text-centered">
+					<input type="text" id="last_name" class="input" placeholder="Фамилия" name="last_name" required>
+				</div>
+				<div class="field has-text-centered">
+					<input type="text" id="first_name" class="input" placeholder="Имя" name="first_name" required>
+				</div>
+				<div class="field has-text-centered">
+					<input type="text" id="fathername" class="input" placeholder="Отчество" name="fathername" required>
+				</div>
+				<button class="button is-link" name="Add" formnovalidate="" type="submit">
+					<span>
+						Добавить
+					</span>
+				</button>
+			</form>
+		{% endif %}
+	
+	</div>
+</div>
+{% endblock %}

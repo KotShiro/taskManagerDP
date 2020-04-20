@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="columns has-background-black-ter is-centered has-text-white-bis" style="min-height:101vh;">
+	<!-- на самом деле можно было обойтись и hero, но я обратился к inline-css -->
+	<div class="column is-half">
+    	<h1 class="is-size-3 has-text-centered">{{task.title}}</h1>
+		{% if group in request.user.groups.all %} "some action" {% endif %}
+		{% if group in request.user.groups.all %}
+		
+		{% endif %}
+		<p>{{task.content|safe}}</p>
+		<p>Автор: {{task.director}}</p>
+		<p>Категория:<b>
+			{{task.category}}
+		</b> Приоритет:<b> {{task.priority}} </b></p>
+		<strong>{{task.created}}</strong>
+		{% if user.is_superuser %}
+			{% if task.state %}
+				<div>
+					<strong>Задача не завршена</strong>
+					<form action="" method="post">
+						{% csrf_token %}
+						<input type="hidden" name="IdTask" value="{{task.id}}">
+						<input type="hidden" name="IdExecutor" value="{{ user.id }}">
+
+									<div class="field has-text-centered">
+										{{ formComment|safe }}
+									</div>
+						<button class="button is-link" name="Completed" formnovalidate="" type="submit" value="{{task.id}}">
+							<span class="icon is-small">
+								<i class="fa fa-trash-o"></i>
+							</span>
+							<span>
+								Завершить задачу {{task.id}}
+							</span>
+						</button>
+					</form>
+				</div>
+			{% else %}
+				<strong>Задача завршина</strong>
+				<p>Выполнил: {{task.executor}}</p>
+				<p>{{task.comment|safe}}</p>
+				{% if task.comment %}
+					
+				{% endif %}
+			{% endif %}
+		{% endif %}
+	
+	</div>
+</div>
+{% endblock %}

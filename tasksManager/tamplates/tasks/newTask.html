@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="columns has-background-black-ter is-centered has-text-white-bis" style="min-height:101vh;">
+	<!-- на самом деле можно было обойтись и hero, но я обратился к inline-css -->
+	<div class="column is-half">
+    	<h1 class="is-size-3 has-text-centered"> Список дел {{ user.id }}</h1>
+    	<form action="" method="post">
+        	{% csrf_token %}
+        	<!-- csrf для базовой безопасности нашего приложения -->
+			<input type="hidden" name="director" id="director" value="{{ user.id }}">
+			<input type="hidden" name="directorName" id="directorName" value="{{ user.get_username }}">
+            <div class="field has-text-centered">
+            	<label for="description" class="label has-text-white-bis">Введите дело</label>
+            	<div class="control">
+             	   <input type="text" id="description" class="input" placeholder="Заголовок задание"
+                    	name="description" required>
+            	</div>
+        	</div>
+			<div class="field has-text-centered">
+            	<label for="content" class="label has-text-white-bis">Текст задания</label>
+            	<!-- <div class="control"> -->
+             	   <!-- <textarea id="content" class="input" placeholder="Опишите вашу пробелуму, что и с чем случилось?" -->
+                    	<!-- name="content" cols="30" rows="10"></textarea> -->
+						{{ form|safe }}
+						
+            	<!-- </div> -->
+        	</div>
+        	<div class="columns">
+            	<div class="column">
+                	<label for="category">Категории</label>
+                	<div class="control">
+                    	<div class="select">
+                        	<select id="category" class="select" name="category_select" required>
+                            	<!--поставишь такой required, и не надо пустые поляв бд валидизировать. Не повторять в продакшене-->
+                            	<option class="disabled" value="">Выберите категорию дела</option>
+                    	        {% for category in categories %}
+ 	                           <option class="" value="{{ category.name }}" name="{{ category.name }}">
+                                    {{ category.name }}</option>
+                            	{% endfor %}
+                        	</select>
+    	                </div>
+                	</div>
+            	</div>
+				<div class="column">
+                	<label for="category">Приоритет</label>
+                	<div class="control">
+                    	<div class="select">
+                        	<select id="category" class="select" name="priority_select" required>
+                            	<!--поставишь такой required, и не надо пустые поляв бд валидизировать. Не повторять в продакшене-->
+                            	<option class="disabled" value="">Выберите приаритет задачи</option>
+                    	        {% for priority in prioritys %}
+ 	                           <option class="" value="{{ priority.name }}" name="{{ priority.name }}">
+                                    {{ priority.name }}</option>
+                            	{% endfor %}
+                        	</select>
+    	                </div>
+                	</div>
+            	</div>
+            	<div class="column">
+                	<label for="dueDate">Выберите рекомендуюмую дату завершения</label>
+                	<input type="date" id="dueDate" class="input calendar" name="date" required>
+            	</div>
+        	</div>
+        	<div class="column">
+            	<div class="field">
+                	<button class="button is-primary" name="Add" type="submit">
+                    	<span class="icon is-small">
+                        	<i class="fa fa-plus"></i>
+                    	</span>
+                    	<span>Добавить задание</span>
+                	</button>
+            	</div>
+        	</div>
+    	</form>
+
+	
+	</div>
+</div>
+{% endblock %}

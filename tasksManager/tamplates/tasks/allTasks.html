@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+		
+<!-- <script src="filterTable.v1.0.min.js"></script> -->
+<script type="text/javascript">
+
+function tableSearch() {
+    var phrase = document.getElementById('search-text');
+
+    var table = document.getElementById('info-table');
+    var regPhrase = new RegExp(phrase.value, 'i');
+    var flag = false;
+    for (var i = 1; i < table.rows.length; i++) {
+        flag = false;
+        for (var j = table.rows[i].cells.length - 1; j >= 0; j--) {
+            flag = regPhrase.test(table.rows[i].cells[j].innerHTML);
+            if (flag) break;
+        }
+        if (flag) {
+            table.rows[i].style.display = "";
+        } else {
+            table.rows[i].style.display = "none";
+        }
+
+    }
+}
+</script>
+
+
+	<h1 class="is-size-3 text-center"> Общий список дел</h1>
+	<div class="mb-4 d-flex">
+		<input class="form-control col-6" type="text" placeholder="Поиск по задачам....." id="search-text" onkeyup="tableSearch()">
+		<select class="form-control col-3" id="filterCategory">
+			<option value="">Все категории</option>
+			{% for category in categories %}
+				<option value="{{ category.name }}">{{ category.name }}</option>
+			{% endfor %}
+		</select>
+		<select class="form-control col-3" id="filterStat">
+			<option value="">Статус без фильтра</option>
+				<option value="Активна">Активна</option>
+				<option value="Закрыта">Закрыта</option>
+		</select>
+	</div>
+<table class="table table-striped" id="info-table" >
+    <thead>
+        <tr>
+            <th>Заголовок</th>
+            <th>Категория</th>
+			<th>Дата создания</th>
+            <th>Заявитель</th>
+			<th>Приоритет</th>
+			<th>Статус</th>
+			<th>Исполнитель</th>
+        </tr>
+    </thead>
+    <tbody id="todoList">
+	{% for todo in todos %}
+        <tr>
+			<th>
+				<a href = "{% url 'tasks:detail' todo.id %}"><span class="complete-">{{ todo.title }}</span></a>
+			</th>
+			<th>{{ todo.category }}</th>
+			<th>
+				{{ todo.created }}
+			</th>
+			<th>
+				<a href = "/profile/{{todo.director.id}}">{{ todo.director.get_full_name}}</a>
+			</th>
+			<th>
+				{{ todo.priority }}
+			</th>
+			{% if todo.state %}
+			<th style="background-color: #E1F899">
+			<b>Активна</b>
+			{% else %}
+			<th style="background-color: #99DD99">
+			<b>Закрыта</b>
+			{% endif %}
+			</th>
+			<th>
+				{% if todo.state %}
+					<b>----</b>
+				{% else %}
+					{{ todo.executor }}
+				{% endif %}
+			</th>
+        </tr>
+	{% endfor %}
+	</tbody>
+</table> 
+
+
+
+<script type="text/javascript" src={% static "js/filterTable.v1.0.min.js" %}></script>
+
+<script>
+    filterTable( document.getElementById("todoList"), {
+          
+
+            /* Фильтр для третьего столбца выпадающий список: */
+            1: document.getElementById("filterCategory"),
+			5: document.getElementById("filterStat"),
+
+        }
+    );
+</script>
+
+{% endblock %}

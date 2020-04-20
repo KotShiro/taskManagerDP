@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="columns has-background-black-ter is-centered has-text-white-bis" style="min-height:101vh;">
+	<!-- на самом деле можно было обойтись и hero, но я обратился к inline-css -->
+	<div class="column is-half">
+    	<h1 class="is-size-3 has-text-centered">{{user.username}}: {{user.last_name}} {{user.first_name}} {{user.fathername}} </h1>
+		<div>
+			<h2>Информация о пользователе</h2>
+			<p>Эл. почта: <strong>{{user.email}}</strong></p>
+			<p>Рабочий телефон: <strong>{{user.phone}}</strong></p>
+		</div>
+		<div>
+			<p>последний раз пользвоатель заходил: {{user.last_login}}</p>
+		</div>
+		{% if user.is_superuser %}
+
+		{% endif %}
+	
+	</div>
+</div>
+{% endblock %}

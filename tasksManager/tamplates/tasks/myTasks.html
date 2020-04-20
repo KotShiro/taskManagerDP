@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Мой лист заданий</h1>
+	<div>
+		<a href = "{% url 'tasks:newTask' %}"><span class="complete-">Добавить задачу</span></a>
+	</div>
+    {% if task_list %}
+    <ul>
+
+		<div class="list is-hoverable">
+			{% for todo in task_list %}
+			<!-- шаблонный язык django- for loop -->
+			<div class="list-item">
+				<li>
+					<a href = "{% url 'tasks:detail' todo.id %}"><span class="complete-">{{ todo.title }}</span></a>
+				
+					{% if todo.state %}
+						<b style="background-color: #E1F899">задача активна</b>
+					{% else %}
+						<b style="background-color: #99DD99">задача закрыта</b>
+					{% endif %}
+					<p>
+					<span class=" category-{{ todo.category }} has-text-info">
+						<b>Категория:</b> {{ todo.category }}
+					</span>
+					<strong class="is-pulled-right"><i class="fa fa-calendar"></i> 
+						{{ todo.created }} 
+					</strong>
+					</p>
+				</li>
+			</div>
+			{% endfor %}
+		</div>
+      {% for bookinst in Task %} 
+      <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
+		<a href = "{% url 'tasks:detail' bookinst.id %}"><span class="complete-">{{ bookinst.title }}</span></a>
+
+	  </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+      <p>Пока не создано ни одной задачи.</p>
+    {% endif %}       
+{% endblock %}
